@@ -1,0 +1,2 @@
+nanoc-sprockets-template
+========================
