@@ -1,0 +1,58 @@
+#!/usr/bin/env ruby
+
+require 'compass'
+
+haml_options = { :format => :html5 }
+
+compile %r{/assets/(stylesheets|javascripts)/application.*} do
+  filter :sprockets, {
+    :css_compressor => :sass,
+    :js_compressor  => :uglifier
+  }
+end
+compile %r{/assets/(stylesheets|javascripts)/.+} do
+    # don’t compile partials
+end
+
+compile '*' do
+  if item.binary?
+    # don’t filter binary items
+  else
+    case item[:extension]
+    when 'haml'
+      filter :haml, haml_options
+    when 'erb'
+      filter :erb
+    when 'md'
+      filter :kramdown
+    when 'nothing'
+      # Nothing
+    end
+    layout 'default'
+  end
+end
+
+route %r{/assets/(stylesheets|javascripts)/application.*} do
+  Nanoc::Helpers::Sprockets.asset_path(item)
+end
+route %r{/assets/javascripts/livereload.js} do
+  Nanoc::Helpers::Sprockets.asset_path(item)
+end
+route %r{/assets/(stylesheets|javascripts)/.*} do
+  nil
+end
+route %r{/assets/(images|fonts)/.*} do
+  Nanoc::Helpers::Sprockets.asset_path(item)
+end
+
+route '*' do
+  if item.binary?
+    # Write item with identifier /foo/ to /foo.ext
+    item.identifier.chop + '.' + item[:extension]
+  else
+    # Write item with identifier /foo/ to /foo/index.html
+    item.identifier + 'index.html'
+  end
+end
+
+layout '*', :haml, haml_options
