@@ -1,6 +1,8 @@
+require 'less'
 require 'sass'
 require 'uglifier'
 require 'sprockets-helpers'
+require 'sprockets-less'
 require 'sprockets-sass'
 require 'nanoc-sprockets-filter'
 

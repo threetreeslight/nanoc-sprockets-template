@@ -14,6 +14,7 @@ gem 'compass'
 gem 'coffee-script'
 gem 'uglifier'
 gem 'sprockets-helpers'
+gem 'sprockets-less'
 gem 'sprockets-sass'
 gem 'nanoc-sprockets-filter'
 
